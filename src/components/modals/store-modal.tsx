@@ -17,6 +17,7 @@ import { useMutation } from '@tanstack/react-query';
 import { StoreCreateRequest } from '@/lib/validators/store';
 import axios from 'axios';
 import { useToast } from '@/hooks/use-toast';
+import { Store } from '@prisma/client';
 
 const formSchema = z.object({
   name: z.string().min(1),
@@ -37,20 +38,21 @@ const StoreModal = () => {
     mutationFn: async ({ name }: StoreCreateRequest) => {
       const payload: StoreCreateRequest = { name };
       const { data } = await axios.post('/api/stores', payload);
-      return data;
+      return data as Store;
     },
-    onError: () => {
+    onError: (error) => {
       console.log('unable to create store');
+      console.log(error);
       return toast({
         title: 'Something went wrong.',
         description: 'Your post was not published. Please try again.',
         variant: 'destructive',
       });
     },
-    onSuccess: () => {
-      onClose();
-
-      return toast({
+    onSuccess: (data) => {
+      // Not sure why router.push(`/${data.id}`) router.refresh() doesn't work here
+      window.location.assign(`/${data.id}`);
+      toast({
         title: 'Store created.',
         description: 'Your store was successfully created.',
         variant: 'default',
