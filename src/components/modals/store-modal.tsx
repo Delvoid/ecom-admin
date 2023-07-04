@@ -13,15 +13,18 @@ import {
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
-import { useState } from 'react';
+import { useMutation } from '@tanstack/react-query';
+import { StoreCreateRequest } from '@/lib/validators/store';
+import axios from 'axios';
+import { useToast } from '@/hooks/use-toast';
 
 const formSchema = z.object({
   name: z.string().min(1),
 });
 
 const StoreModal = () => {
+  const { toast } = useToast();
   const { isOpen, onClose } = useStoreModal();
-  const [loading, setLoading] = useState(false);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -30,8 +33,34 @@ const StoreModal = () => {
     },
   });
 
-  const onSubmit = async (values: z.infer<typeof formSchema>) => {
-    console.log(values);
+  const { mutate: createStore, isLoading } = useMutation({
+    mutationFn: async ({ name }: StoreCreateRequest) => {
+      const payload: StoreCreateRequest = { name };
+      const { data } = await axios.post('/api/stores', payload);
+      return data;
+    },
+    onError: () => {
+      console.log('unable to create store');
+      return toast({
+        title: 'Something went wrong.',
+        description: 'Your post was not published. Please try again.',
+        variant: 'destructive',
+      });
+    },
+    onSuccess: () => {
+      onClose();
+
+      return toast({
+        title: 'Store created.',
+        description: 'Your store was successfully created.',
+        variant: 'default',
+      });
+    },
+  });
+
+  const onSubmit = async (values: StoreCreateRequest) => {
+    const payload: StoreCreateRequest = { name: values.name };
+    createStore(payload);
   };
 
   return (
@@ -51,17 +80,17 @@ const StoreModal = () => {
                 <FormItem>
                   <FormLabel>Name</FormLabel>
                   <FormControl>
-                    <Input disabled={loading} placeholder="E-Commerce" {...field} />
+                    <Input disabled={isLoading} placeholder="E-Commerce" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
               )}
             />
             <div className="pt-6 space-x-2 flex items-center justify-end w-full">
-              <Button disabled={loading} variant="outline" onClick={onClose}>
+              <Button disabled={isLoading} variant="outline" onClick={onClose}>
                 Cancel
               </Button>
-              <Button disabled={loading} type="submit">
+              <Button disabled={isLoading} isLoading={isLoading} type="submit">
                 Continue
               </Button>
             </div>
