@@ -13,7 +13,7 @@ export const metadata = {
   description: 'e-commerce admin dashboard',
 };
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export default async function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <ReactQueryProvider>
       <ClerkProvider>
