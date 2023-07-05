@@ -18,14 +18,12 @@ import { StoreCreateRequest } from '@/lib/validators/store';
 import axios from 'axios';
 import { useToast } from '@/hooks/use-toast';
 import { Store } from '@prisma/client';
-import { useRouter } from 'next/navigation';
 
 const formSchema = z.object({
   name: z.string().min(1),
 });
 
 const StoreModal = () => {
-  const router = useRouter();
   const { toast } = useToast();
   const { isOpen, onClose } = useStoreModal();
 
@@ -47,7 +45,7 @@ const StoreModal = () => {
       console.log(error);
       return toast({
         title: 'Something went wrong.',
-        description: 'Your post was not published. Please try again.',
+        description: 'Your store could not be created. Please try again.',
         variant: 'destructive',
       });
     },
