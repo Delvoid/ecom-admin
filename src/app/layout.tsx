@@ -19,9 +19,9 @@ export default async function RootLayout({ children }: { children: React.ReactNo
       <ClerkProvider>
         <html lang="en">
           <body className={inter.className}>
+            <Toaster />
             <ModalProvider />
             {children}
-            <Toaster />
           </body>
         </html>
       </ClerkProvider>

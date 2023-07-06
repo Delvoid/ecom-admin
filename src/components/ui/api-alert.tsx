@@ -1,5 +1,5 @@
 import { Copy, Server } from 'lucide-react';
-import { toast } from 'react-hot-toast';
+import { useToast } from '@/hooks/use-toast';
 
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Badge, BadgeProps } from '@/components/ui/badge';
@@ -22,9 +22,14 @@ const variantMap: Record<ApiAlertProps['variant'], BadgeProps['variant']> = {
 };
 
 export const ApiAlert: React.FC<ApiAlertProps> = ({ title, description, variant = 'public' }) => {
+  const { toast } = useToast();
   const onCopy = (description: string) => {
     navigator.clipboard.writeText(description);
-    toast.success('API Route copied to clipboard.');
+    toast({
+      title: 'API Route copied to clipboard.',
+      description: 'You can now use this route to make requests to your store.',
+      variant: 'default',
+    });
   };
 
   return (
