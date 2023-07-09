@@ -77,6 +77,9 @@ export async function DELETE(
       },
     });
 
+    const url = getCloudinaryImageId(billboard.imageUrl);
+    await cloudinary.v2.api.delete_resources([url]);
+
     return NextResponse.json(billboard);
   } catch (error) {
     console.log('[BILLBOARD_DELETE]', error);
@@ -125,10 +128,7 @@ export async function PATCH(
     }
 
     if (billboardByStoreId.imageUrl && billboardByStoreId.imageUrl !== imageUrl) {
-      console.log('Deleting old image');
-      console.log(billboardByStoreId.imageUrl);
       const url = getCloudinaryImageId(billboardByStoreId.imageUrl);
-      console.log({ url });
       await cloudinary.v2.api.delete_resources([url]);
     }
 

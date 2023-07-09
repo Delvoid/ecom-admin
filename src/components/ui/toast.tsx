@@ -40,8 +40,9 @@ const toastVariants = cva(
 
 const Toast = React.forwardRef<
   React.ElementRef<typeof ToastPrimitives.Root>,
-  React.ComponentPropsWithoutRef<typeof ToastPrimitives.Root> & VariantProps<typeof toastVariants>
->(({ className, variant, ...props }, ref) => {
+  React.ComponentPropsWithoutRef<typeof ToastPrimitives.Root> &
+    VariantProps<typeof toastVariants> & { icon?: React.ReactElement }
+>(({ className, variant, icon, ...props }, ref) => {
   return (
     <ToastPrimitives.Root
       ref={ref}
