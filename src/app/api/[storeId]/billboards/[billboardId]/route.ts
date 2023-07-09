@@ -16,8 +16,6 @@ cloudinary.v2.config({
   api_secret,
 });
 
-console.log({ cloud_name, api_key, api_secret });
-
 function getCloudinaryImageId(url: string): string {
   const splitUrl = url.split('/');
   const fullId = splitUrl[splitUrl.length - 1]; // Get the last part, which is 'v1688683975/grr2umhhat4adrco7lnc.jpg'
