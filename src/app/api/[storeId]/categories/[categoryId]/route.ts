@@ -2,7 +2,6 @@ import { NextResponse } from 'next/server';
 import { auth } from '@clerk/nextjs';
 
 import { db } from '@/lib/prismadb';
-import { BillboardValidator } from '@/lib/validators/billboard';
 import { CategoryValidator } from '@/lib/validators/category';
 
 export async function GET(_req: Request, { params }: { params: { categoryId: string } }) {
