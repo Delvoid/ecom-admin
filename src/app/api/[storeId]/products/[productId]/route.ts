@@ -34,6 +34,12 @@ export async function GET(_req: Request, { params }: { params: { productId: stri
       where: {
         id: params.productId,
       },
+      include: {
+        images: true,
+        category: true,
+        size: true,
+        color: true,
+      },
     });
 
     return NextResponse.json(product);
